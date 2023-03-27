@@ -1,0 +1,36 @@
+package com.api.mitra_di_chaap.payloads;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import com.api.mitra_di_chaap.entities.Cart;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+public class ItemDto {
+	
+	private Integer item_id;
+	
+	private String title;
+	
+	
+	private String description;
+	
+	private String imageName;
+	
+	
+	private CategoryDto ctaegory;
+	
+	private UserDto user;
+	
+	private Cart cart;
+	
+	
+	private Set<ReviewsDto> reviews = new HashSet<>();
+	
+}

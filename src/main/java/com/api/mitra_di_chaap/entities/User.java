@@ -5,11 +5,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,17 +37,11 @@ public class User {
 	
 	
 	// cart-items
-//	private List<Food_Card> food_items = new ArrayList<>();
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Item> food_items = new ArrayList<>();
 	
 	
-	// user role : customer Or operator
-//	private Set<Role> roles = new HashSet<>();
-	
-	
-	
-	
-	
-	
-
+	// user role : customer Or operator, an operator can delete user.
+	private Set<Role> roles = new HashSet<>();
 	
 }
