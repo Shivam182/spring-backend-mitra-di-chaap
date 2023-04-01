@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.api.mitra_di_chaap.entities.Cart;
 import com.api.mitra_di_chaap.entities.Category;
@@ -18,6 +19,8 @@ import com.api.mitra_di_chaap.repositories.ItemRepo;
 import com.api.mitra_di_chaap.repositories.UserRepo;
 import com.api.mitra_di_chaap.services.ItemService;
 
+
+@Service
 public class ItemServiceImpl implements ItemService {
 
 	
@@ -38,19 +41,35 @@ public class ItemServiceImpl implements ItemService {
 	private CategoryRepo categoryRepo;
 	
 	
+	@Override
+	public ItemDto addToCart(Integer itemId, Integer cartId) {
+		Cart cart = this.cartRepo.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("User", "user id", cartId));
+		
+		Item item = this.itemRepo.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item","item id",itemId));
+		
+//		this.cartRepo.save(item);
+		
+		item.setCart(cart);
+		
+		
+		
+		return this.modelMapper.map(item, ItemDto.class);
+	}
+	
+	
 	
 	@Override
-	public ItemDto createItem(ItemDto itemDto, Integer userId, Integer categoryId) {
+	public ItemDto createItem(ItemDto itemDto, Integer categoryId) {
 		
-		Cart cart = this.cartRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("Cart","cart id",userId));
 		
 		Category category = this.categoryRepo.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category","category id",categoryId));
 		
 		Item item = this.modelMapper.map(itemDto, Item.class);
 		
+		
 		item.setImageName("default.png");
 		item.setCategory(category);
-		item.setCart(cart);
+		
 		
 		Item newItem = this.itemRepo.save(item);
 		
@@ -107,10 +126,15 @@ public class ItemServiceImpl implements ItemService {
 
 	
 	
-	// cartId same as userId.
-	
+
+
+	// gets all items of a user cart
 	@Override
 	public List<ItemDto> getItemsByUser(Integer cartId) {
+		
+//		Cart cart = this.cartRepo.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("User","user id",cartId));
+//		
+//		List<Integer> ids = cart.getFood_item();
 		
 		User user  = this.userRepo.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("User","user id",cartId));
 		List<Item> items = this.itemRepo.findByUser(user);

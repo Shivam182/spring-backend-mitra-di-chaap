@@ -1,7 +1,12 @@
 package com.api.mitra_di_chaap.services.impl;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.api.mitra_di_chaap.entities.Item;
 import com.api.mitra_di_chaap.entities.Reviews;
@@ -11,6 +16,8 @@ import com.api.mitra_di_chaap.repositories.ItemRepo;
 import com.api.mitra_di_chaap.repositories.ReviewsRepo;
 import com.api.mitra_di_chaap.services.ReviewsService;
 
+
+@Service
 public class ReviewsServiceImpl implements ReviewsService {
 
 	@Autowired
@@ -25,11 +32,17 @@ public class ReviewsServiceImpl implements ReviewsService {
 	
 	
 	@Override
-	public ReviewsDto createReview(ReviewsDto reviewsDto, Integer itemId) {
+	public ReviewsDto createReview(ReviewsDto reviewsDto, Integer itemId,Integer userId) {
+		
+		// get the food item
 		Item item = this.itemRepo.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item","item id",itemId));
+		
+		
 		Reviews review = this.modelMapper.map(reviewsDto, Reviews.class);
 		
-		review.setFood_item(item);
+		review.setFoodItem(item);
+		review.setUserId(userId);
+		
 		
 		Reviews savedReview = this.reviewsRepo.save(review);
 		
@@ -38,11 +51,30 @@ public class ReviewsServiceImpl implements ReviewsService {
 	
 
 	@Override
-	public void deleteReview(Integer reviewId) {
+	public void deleteReview(Integer reviewId, Integer userId) {
+		
+		
+		// TODO only owner of the review can delete it 
 		
 		Reviews review =  this.reviewsRepo.findById(reviewId).orElseThrow(()-> new ResourceNotFoundException("Review","review id",reviewId));
 		
 		this.reviewsRepo.delete(review);
+	}
+
+
+	@Override
+	public List<ReviewsDto> allreviews(Integer itemId) {
+		
+		// get an item
+		Item item = this.itemRepo.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item","item id",itemId));
+	
+		// get all its reviews
+		Set<Reviews> reviews = item.getReviews();
+		
+		List<ReviewsDto> reviewsDtos = reviews.stream().map((review)-> this.modelMapper.map(review, ReviewsDto.class)).collect(Collectors.toList());
+		
+		return reviewsDtos;
+		
 	}
 
 }

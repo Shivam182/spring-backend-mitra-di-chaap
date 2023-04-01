@@ -1,19 +1,23 @@
 package com.api.mitra_di_chaap.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name="reviews")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Reviews {
 	
 	@Id
@@ -22,7 +26,11 @@ public class Reviews {
 	
 	private String content;
 	
+	// one comment one user id 
+	private Integer userId;
+	
+	
 	@ManyToOne
-	private Item food_item;
-
+	@JoinColumn(name="itemId")
+	private Item foodItem;
 }

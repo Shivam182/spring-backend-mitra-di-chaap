@@ -3,6 +3,7 @@ package com.api.mitra_di_chaap.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,13 +26,15 @@ public class Cart {
 	// assign cartId same as user id.
 	
 	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int cartId;
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int cartId;	
 	
 	private int total;
 	
-	@OneToMany(mappedBy="cart")
-	private List<Item> food_item = new ArrayList<>();
+	
+	
+//	@OneToMany(mappedBy="itemId")
+	@ElementCollection
+	private List<Integer> food_item = new ArrayList<>();
 
 }

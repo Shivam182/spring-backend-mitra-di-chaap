@@ -51,8 +51,10 @@ public class Item {
 	@JoinColumn(name="cartId")
 	private Cart cart;
 	
-	@OneToMany(mappedBy="food_item", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="foodItem", cascade = CascadeType.ALL)
 	private Set<Reviews> reviews = new HashSet<>();
 	
+	@ManyToOne
+	private User user;
 	
 }

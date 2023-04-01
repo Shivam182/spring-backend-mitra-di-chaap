@@ -7,7 +7,7 @@ import com.api.mitra_di_chaap.payloads.ItemDto;
 public interface ItemService {
 
 	// create
-	ItemDto createItem(ItemDto itemDto, Integer userId, Integer categoryId);
+	ItemDto createItem(ItemDto itemDto,  Integer categoryId);
 	
 	
 	// update
@@ -15,6 +15,9 @@ public interface ItemService {
 	
 	// delete
 	void deleteItem(Integer itemId);
+	
+	// add to cart
+	ItemDto addToCart(Integer itemId, Integer cartId);
 	
 	// get all items
 	

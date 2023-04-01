@@ -7,9 +7,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api.mitra_di_chaap.config.AppConstants;
+import com.api.mitra_di_chaap.entities.Role;
 import com.api.mitra_di_chaap.entities.User;
 import com.api.mitra_di_chaap.exceptions.ResourceNotFoundException;
 import com.api.mitra_di_chaap.payloads.UserDto;
+import com.api.mitra_di_chaap.repositories.RoleRepo;
 import com.api.mitra_di_chaap.repositories.UserRepo;
 import com.api.mitra_di_chaap.services.UserService;
 
@@ -23,10 +26,28 @@ public class UserServiceImpl implements UserService {
 	private ModelMapper modelMapper;
 	
 	
+	private RoleRepo roleRepo;
+	
+	
 	
 	@Override
-	public UserDto registerUser(UserDto user) {
-		return null;
+	public UserDto registerUser(UserDto userDto) {
+		
+		User user = this.modelMapper.map(userDto, User.class);
+		
+		
+		// encode the password
+		
+		// roles
+		Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+		
+		user.getRoles().add(role);
+		
+		User newUser = this.userRepo.save(user);
+		
+		
+		
+		return this.modelMapper.map(newUser, UserDto.class);
 	}
 
 	
@@ -89,7 +110,7 @@ public class UserServiceImpl implements UserService {
 //		user.setId(userDto.getId());
 //		user.setName(userDto.getName());
 //		user.setEmail(userDto.getEmail());
-////		user.setAbout(userDto.getAbout());
+//		user.setAbout(userDto.getAbout());
 //		user.setPassword(userDto.getPassword());
 		return user;
 		

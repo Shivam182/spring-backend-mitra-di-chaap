@@ -14,22 +14,19 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ItemDto {
 	
-	private Integer item_id;
+	private Integer itemId;
 	
 	private String title;
-	
 	
 	private String description;
 	
 	private String imageName;
 	
-	
-	private CategoryDto ctaegory;
+	private CategoryDto category;
 	
 	private UserDto user;
 	
 	private Cart cart;
-	
 	
 	private Set<ReviewsDto> reviews = new HashSet<>();
 	

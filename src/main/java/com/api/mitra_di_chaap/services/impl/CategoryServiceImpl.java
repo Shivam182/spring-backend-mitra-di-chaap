@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.api.mitra_di_chaap.entities.Category;
 import com.api.mitra_di_chaap.exceptions.ResourceNotFoundException;
@@ -12,6 +13,7 @@ import com.api.mitra_di_chaap.payloads.CategoryDto;
 import com.api.mitra_di_chaap.repositories.CategoryRepo;
 import com.api.mitra_di_chaap.services.CategoryService;
 
+@Service
 public class CategoryServiceImpl implements CategoryService {
 	
 	@Autowired

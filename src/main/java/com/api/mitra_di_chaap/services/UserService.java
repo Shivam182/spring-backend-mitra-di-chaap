@@ -17,7 +17,7 @@ public interface UserService {
 	
 	List<UserDto> getAllUsers();
 	
-	
+	// only for self and operator 
 	void deleteUser(Integer userId);	
 	
 	

@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.mitra_di_chaap.payloads.ApiResponse;
+import com.api.mitra_di_chaap.payloads.CartDto;
 import com.api.mitra_di_chaap.payloads.UserDto;
+import com.api.mitra_di_chaap.services.CartService;
 import com.api.mitra_di_chaap.services.UserService;
 
 @RestController
@@ -28,14 +31,23 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private CartService cartService;
+	
+	
 	
 	@PostMapping("/")
-	public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto){
+	public ResponseEntity<CartDto> createUser(@Valid @RequestBody UserDto userDto){
 		
 		UserDto created_user = this.userService.createUser(userDto);
 		
-		return new ResponseEntity<>(created_user, HttpStatus.CREATED);
+			//create a cart 
+		CartDto created_cart = this.cartService.createCart(userDto.getId());
+		
+		return new ResponseEntity<CartDto>(created_cart, HttpStatus.CREATED);
 	}
+	
+	
 	
 	
 	@PutMapping("/{userId}")
@@ -46,6 +58,7 @@ public class UserController {
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<ApiResponse> deleteUser(@PathVariable("userId") Integer id){
 			
@@ -66,6 +79,12 @@ public class UserController {
 	@GetMapping("/{userId}")
 	public ResponseEntity<UserDto> getSingleUser(@PathVariable Integer userId){
 		
-		return ResponseEntity.ok(this.userService.getUserById(userId));
+		UserDto userDto = this.userService.getUserById(userId);
+		
+		
+		
+		return ResponseEntity.ok(userDto);
 	}
+	
+	
 }
