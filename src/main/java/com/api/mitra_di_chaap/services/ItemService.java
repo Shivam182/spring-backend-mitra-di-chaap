@@ -3,6 +3,7 @@ package com.api.mitra_di_chaap.services;
 import java.util.List;
 
 import com.api.mitra_di_chaap.payloads.ItemDto;
+import com.api.mitra_di_chaap.payloads.ItemResponse;
 
 public interface ItemService {
 
@@ -20,6 +21,8 @@ public interface ItemService {
 	ItemDto addToCart(Integer itemId, Integer cartId);
 	
 	// get all items
+	
+	ItemResponse getAllItems(Integer pageNumber, Integer pageSize,String sortBy, String sortDir);
 	
 	
 	// get item by id
