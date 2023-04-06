@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.api.mitra_di_chaap.config.AppConstants;
@@ -25,8 +26,11 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	
+	@Autowired
 	private RoleRepo roleRepo;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	
 	
@@ -37,9 +41,11 @@ public class UserServiceImpl implements UserService {
 		
 		
 		// encode the password
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		
-		// roles
+		// role assign : normal user
 		Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+		
 		
 		user.getRoles().add(role);
 		
@@ -51,17 +57,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	
-	// TODO: check if the user already exists before registering them !!!
-	@Override
-	public UserDto createUser(UserDto userDto) {
-		User user = this.dtoToUser(userDto);
-		
-		User saved_user = this.userRepo.save(user);
-		
-		
-		return this.userToDto(saved_user);
-	}
+	// TODO: Redundant method !!!!
+//	@Override
+//	public UserDto createUser(UserDto userDto) {
+//		User user = this.dtoToUser(userDto);
+//		
+//		User saved_user = this.userRepo.save(user);
+//		
+//		
+//		return this.userToDto(saved_user);
+//	}
 
+	
 	
 	@Override
 	public UserDto updateuser(UserDto userDto, Integer userId) {

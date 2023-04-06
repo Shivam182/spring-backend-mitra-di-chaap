@@ -2,7 +2,6 @@ package com.api.mitra_di_chaap.security;
 
 import java.io.IOException;
 
-import javax.naming.AuthenticationException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +16,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			org.springframework.security.core.AuthenticationException authException)
 			throws IOException, ServletException {
-		
+//		System.out.println("i worked .....");
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Access Denied !!");
 		
 	}

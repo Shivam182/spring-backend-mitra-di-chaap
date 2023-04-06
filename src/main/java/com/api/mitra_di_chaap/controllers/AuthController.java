@@ -40,11 +40,14 @@ public class AuthController {
 	private UserService userService;
 	
 	
-	@PostMapping("/login")
+	// this gives a token which can be used in every consecutive requests.
+	
+	@PostMapping("/createToken")
 	public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest request) throws Exception{
 		
-		
 		this.authenticate(request.getUsername(),request.getPassword());
+		
+		
 		
 		UserDetails userDetails = this.userDetailService.loadUserByUsername(request.getUsername());
 		
@@ -53,7 +56,8 @@ public class AuthController {
 		JwtAuthResponse response = new JwtAuthResponse();
 		response.setToken(token);
 		
-		
+//		System.out.println("helllo................");
+
 		return new ResponseEntity<JwtAuthResponse>(response,HttpStatus.OK);
 	}
 	
@@ -61,8 +65,7 @@ public class AuthController {
 	private void authenticate(String username, String password) throws Exception {
 		
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-		
-		
+
 		try {
 			this.authenticationManager.authenticate(authenticationToken);
 		}catch(BadCredentialsException e) {
@@ -74,6 +77,8 @@ public class AuthController {
 		
 	}
 	
+	
+	@PostMapping("/register")
 	public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto){
 		UserDto registeredUser = this.userService.registerUser(userDto);
 		

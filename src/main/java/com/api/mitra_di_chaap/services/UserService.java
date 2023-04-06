@@ -7,7 +7,7 @@ import com.api.mitra_di_chaap.payloads.UserDto;
 public interface UserService {
 	UserDto registerUser(UserDto user);
 	
-	UserDto createUser(UserDto user);
+//	UserDto createUser(UserDto user);
 	
 	
 	UserDto updateuser(UserDto user, Integer userId);

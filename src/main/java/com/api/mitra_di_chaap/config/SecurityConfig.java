@@ -40,10 +40,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http.
-		csrf().disable()
+		csrf()
+		.disable()
+		.cors()
+		.disable()
 		.authorizeHttpRequests()
 		.antMatchers("/api/v1/auth/**").permitAll()
-		.antMatchers(HttpMethod.GET).permitAll()
+//		.antMatchers(HttpMethod.GET).permitAll()
 		.anyRequest()
 		.authenticated()
 		.and()
@@ -62,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
 		
-		auth.userDetailsService(this.customUserDetailService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(this.customUserDetailService);
 		
 	}
 	

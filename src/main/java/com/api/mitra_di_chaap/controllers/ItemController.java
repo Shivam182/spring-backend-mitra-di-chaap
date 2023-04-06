@@ -28,6 +28,7 @@ import com.api.mitra_di_chaap.config.AppConstants;
 import com.api.mitra_di_chaap.payloads.ApiResponse;
 import com.api.mitra_di_chaap.payloads.CartDto;
 import com.api.mitra_di_chaap.payloads.ItemDto;
+import com.api.mitra_di_chaap.payloads.ItemResponse;
 import com.api.mitra_di_chaap.services.CartService;
 import com.api.mitra_di_chaap.services.FileService;
 import com.api.mitra_di_chaap.services.ItemService;
@@ -48,6 +49,8 @@ public class ItemController {
 	@Autowired
 	private FileService fileService;
 	
+	
+	// here the images folder in our server program only acts as the database for serving/storing the images.
 	@Value("${project.image}")
 	private String path;
 	
@@ -93,15 +96,14 @@ public class ItemController {
 		
 		
 		
-//		
-//		// get all posts
-//		@GetMapping("/posts")
-//		public ResponseEntity<PostResponse> getAllPost(@RequestParam(value= "pageNumber",defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber, @RequestParam(value="pageSize",defaultValue= AppConstants.PAGE_SIZE,required=false) Integer pageSize , @RequestParam(value = "sortBy", defaultValue=AppConstants.SORT_BY,required= false) String sortBy, @RequestParam(value= "sortDir",defaultValue=AppConstants.SORT_DIR,required= false) String sortDir){
-//			
-//			PostResponse postResposne = this.itemService.getAllItem(pageNumber,pageSize,sortBy,sortDir);
-//			
-//			return new ResponseEntity<PostResponse>(postResposne,HttpStatus.OK);
-//		}
+		// get all items
+		@GetMapping("/items")
+		public ResponseEntity<ItemResponse> getAllPost(@RequestParam(value= "pageNumber",defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber, @RequestParam(value="pageSize",defaultValue= AppConstants.PAGE_SIZE,required=false) Integer pageSize , @RequestParam(value = "sortBy", defaultValue=AppConstants.SORT_BY,required= false) String sortBy, @RequestParam(value= "sortDir",defaultValue=AppConstants.SORT_DIR,required= false) String sortDir){
+			
+			ItemResponse postResposne = this.itemService.getAllItems(pageNumber,pageSize,sortBy,sortDir);
+			
+			return new ResponseEntity<ItemResponse>(postResposne,HttpStatus.OK);
+		}
 		
 		
 		// get item by Id

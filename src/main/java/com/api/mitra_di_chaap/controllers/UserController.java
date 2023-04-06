@@ -36,10 +36,12 @@ public class UserController {
 	
 	
 	
-	@PostMapping("/")
-	public ResponseEntity<CartDto> createUser(@Valid @RequestBody UserDto userDto){
+	// TODO: Redundant method, register or login can be used.
+	
+	@PostMapping("/createCart")
+	public ResponseEntity<CartDto> createUserCart(@Valid @RequestBody UserDto userDto){
 		
-		UserDto created_user = this.userService.createUser(userDto);
+//		UserDto created_user = this.userService.createUser(userDto);
 		
 			//create a cart 
 		CartDto created_cart = this.cartService.createCart(userDto.getId());
