@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,8 +55,8 @@ public class ItemController {
 	@Value("${project.image}")
 	private String path;
 	
-		// create
-	
+		// create : only admin accessible 
+		@PreAuthorize("hasAuthority('ADMIN')")
 		@PostMapping("/item/category/{categoryId}")
 		public ResponseEntity<ItemDto> createItem( @RequestBody ItemDto itemDto, @PathVariable Integer categoryId){
 			
@@ -66,7 +67,8 @@ public class ItemController {
 		
 		
 		
-		// get by user
+		// get by cartUId
+		@PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
 		@GetMapping("/user/{userId}/items")
 		public ResponseEntity<List<ItemDto>> getItemsByUser(@PathVariable Integer userId){
 			
@@ -85,9 +87,9 @@ public class ItemController {
 		
 		
 		
-		// get by category
+		// get by category : accessible to everyone
 		@GetMapping("/category/{categoryId}/items")
-		public ResponseEntity<List<ItemDto>> getPostByCategory(@PathVariable Integer categoryId){
+		public ResponseEntity<List<ItemDto>> getItemByCategory(@PathVariable Integer categoryId){
 			
 			List<ItemDto> posts = this.itemService.getItemsByCategory(categoryId);
 			return new ResponseEntity<List<ItemDto>>(posts,HttpStatus.OK);
@@ -96,9 +98,9 @@ public class ItemController {
 		
 		
 		
-		// get all items
+		// get all items : accessible to all
 		@GetMapping("/items")
-		public ResponseEntity<ItemResponse> getAllPost(@RequestParam(value= "pageNumber",defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber, @RequestParam(value="pageSize",defaultValue= AppConstants.PAGE_SIZE,required=false) Integer pageSize , @RequestParam(value = "sortBy", defaultValue=AppConstants.SORT_BY,required= false) String sortBy, @RequestParam(value= "sortDir",defaultValue=AppConstants.SORT_DIR,required= false) String sortDir){
+		public ResponseEntity<ItemResponse> getAllItems(@RequestParam(value= "pageNumber",defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber, @RequestParam(value="pageSize",defaultValue= AppConstants.PAGE_SIZE,required=false) Integer pageSize , @RequestParam(value = "sortBy", defaultValue=AppConstants.SORT_BY,required= false) String sortBy, @RequestParam(value= "sortDir",defaultValue=AppConstants.SORT_DIR,required= false) String sortDir){
 			
 			ItemResponse postResposne = this.itemService.getAllItems(pageNumber,pageSize,sortBy,sortDir);
 			
@@ -106,7 +108,7 @@ public class ItemController {
 		}
 		
 		
-		// get item by Id
+		// get item by Id: accessible to everyone 
 		@GetMapping("/item/{itemId}")
 		public ResponseEntity<ItemDto> getPostById(@PathVariable Integer itemId){
 			
@@ -119,9 +121,10 @@ public class ItemController {
 		
 		
 		
-		// delete post
+		// delete item: only admin accessible
+		@PreAuthorize("hasAuthority('ADMIN')")
 		@DeleteMapping("/item/{itemId}")
-		public ResponseEntity<ApiResponse> deletePost(@PathVariable Integer itemId) {
+		public ResponseEntity<ApiResponse> deleteItem(@PathVariable Integer itemId) {
 			
 			this.itemService.deleteItem(itemId);
 			
@@ -131,16 +134,17 @@ public class ItemController {
 		
 		
 		
-		// update post 
+		// update an item: only admin accessible 
+		@PreAuthorize("hasAuthority('ADMIN')")
 		@PutMapping("/item/{itemId}")
-		public ResponseEntity<ItemDto> updatePost(@RequestBody ItemDto itemDto, @PathVariable Integer itemId ){
+		public ResponseEntity<ItemDto> updateItem(@RequestBody ItemDto itemDto, @PathVariable Integer itemId ){
 			
 			ItemDto updatePost = this.itemService.updateItem(itemDto, itemId);
 			return new ResponseEntity<ItemDto>(updatePost,HttpStatus.OK);
 		}
 		
 		
-		// search 
+		// search : to all accessible 
 		@GetMapping("items/search/{keywords}")
 		public ResponseEntity<List<ItemDto>> searchPostByTitle(@PathVariable("keywords") String keywords){
 			List<ItemDto> result = this.itemService.searchItems(keywords);
@@ -149,7 +153,8 @@ public class ItemController {
 		}
 		
 		
-		// post image upload
+		// post image upload: only admin accessible 
+		@PreAuthorize("hasAuthority('ADMIN')")
 		@PostMapping("/item/image/upload/{itemId}")
 		public ResponseEntity<ItemDto> uploadPostImage(@RequestParam("image") MultipartFile image,@PathVariable Integer itemId) throws IOException{
 			ItemDto postDto = this.itemService.getItemById(itemId);
@@ -163,7 +168,8 @@ public class ItemController {
 			return new ResponseEntity<ItemDto>(updatedItem,HttpStatus.OK); 
 		}
 		
-		// method to serve files
+		
+		// method to serve files: all accessible 
 		@GetMapping(value="/item/image/{imageName}",produces = MediaType.IMAGE_JPEG_VALUE)
 		public void downloadImage(@PathVariable("imageName") String imageName,HttpServletResponse response)throws IOException{
 			InputStream resource = this.fileService.getResource(path, imageName);

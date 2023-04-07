@@ -36,8 +36,8 @@ public class UserController {
 	
 	
 	
-	// TODO: Redundant method, register or login can be used.
 	
+	@PreAuthorize("#id == authentication.principal.id")
 	@PostMapping("/createCart")
 	public ResponseEntity<CartDto> createUserCart(@Valid @RequestBody UserDto userDto){
 		
@@ -51,7 +51,7 @@ public class UserController {
 	
 	
 	
-	
+	@PreAuthorize("#id == authentication.principal.id")
 	@PutMapping("/{userId}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto,@PathVariable("userId") Integer userId){
 		UserDto updated_user = this.userService.updateuser(userDto, userId);
@@ -60,7 +60,7 @@ public class UserController {
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<ApiResponse> deleteUser(@PathVariable("userId") Integer id){
 			
@@ -71,6 +71,7 @@ public class UserController {
 	}
 	
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("")
 	public ResponseEntity<List<UserDto>> getAllUsers(){
 		
@@ -78,12 +79,11 @@ public class UserController {
 	}
 	
 	
+	@PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
 	@GetMapping("/{userId}")
 	public ResponseEntity<UserDto> getSingleUser(@PathVariable Integer userId){
 		
 		UserDto userDto = this.userService.getUserById(userId);
-		
-		
 		
 		return ResponseEntity.ok(userDto);
 	}
