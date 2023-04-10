@@ -2,6 +2,7 @@ package com.api.mitra_di_chaap.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,7 +43,7 @@ public class AuthController {
 	
 	// this gives a token which can be used in every consecutive requests.
 	
-	@PostMapping("/createToken")
+	@PostMapping(path="/createToken",consumes ={"*/*"})
 	public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest request) throws Exception{
 		
 		this.authenticate(request.getUsername(),request.getPassword());

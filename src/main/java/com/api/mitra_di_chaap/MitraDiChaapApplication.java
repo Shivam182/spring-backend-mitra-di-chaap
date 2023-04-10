@@ -1,18 +1,27 @@
 package com.api.mitra_di_chaap;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.Ordered;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.api.mitra_di_chaap.config.AppConstants;
 import com.api.mitra_di_chaap.entities.Role;
 import com.api.mitra_di_chaap.repositories.RoleRepo;
 
+//@ServletComponentScan
 @SpringBootApplication
 public class MitraDiChaapApplication {
 	
@@ -62,11 +71,6 @@ public class MitraDiChaapApplication {
 		
 	}
 	
-//	@Bean(name="entityManagerFactory")
-//	public LocalSessionFactoryBean sessionFactory() {
-//	    LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-//
-//	    return sessionFactory;
-//	} 
+	
 
 }

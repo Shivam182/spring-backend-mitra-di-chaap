@@ -5,9 +5,11 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,8 +39,8 @@ public class UserController {
 	
 	
 	
-	@PreAuthorize("#id == authentication.principal.id")
-	@PostMapping("/createCart")
+	@PreAuthorize("#userDto.id == authentication.principal.id")
+	@PutMapping("/createCart")
 	public ResponseEntity<CartDto> createUserCart(@Valid @RequestBody UserDto userDto){
 		
 //		UserDto created_user = this.userService.createUser(userDto);
@@ -79,14 +81,15 @@ public class UserController {
 	}
 	
 	
-	@PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
-	@GetMapping("/{userId}")
+//	@PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
+	@GetMapping(path="/{userId}", consumes= {"*/*"})
 	public ResponseEntity<UserDto> getSingleUser(@PathVariable Integer userId){
 		
 		UserDto userDto = this.userService.getUserById(userId);
-		
-		return ResponseEntity.ok(userDto);
+//		HttpHeaders httpHeaders = new HttpHeaders();
+//		httpHeaders.set("Access-Control-Allow-Origin", "*");
+		return new ResponseEntity<UserDto>(userDto,HttpStatus.OK);
+//		return ResponseEntity.ok().headers(httpHeaders).body(userDto);
 	}
-	
-	
+		
 }

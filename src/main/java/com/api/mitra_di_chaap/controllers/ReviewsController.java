@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,8 @@ public class ReviewsController {
 	@Autowired
 	private ReviewsService reviewsService;
 	
+	
+	@PreAuthorize("#userId == authentication.principal.id")
 	@PostMapping("/user/{userId}/item/{itemId}")
 	public ResponseEntity<ReviewsDto> createReview(@RequestBody ReviewsDto reviews,@PathVariable Integer itemId,@PathVariable Integer userId){
 		
@@ -34,6 +37,8 @@ public class ReviewsController {
 	}
 	
 	
+	// only accessible to writer
+	@PreAuthorize("#userId == authentication.principal.id")
 	@DeleteMapping("/user/{userId}/{reviewId}")
 	public ResponseEntity<ApiResponse> deleteReview(@PathVariable Integer reviewId,@PathVariable Integer userId){
 		
@@ -44,6 +49,7 @@ public class ReviewsController {
 	}
 	
 	
+	//  accessible to everyone 
 	@GetMapping("/item/{itemId}")
 	public ResponseEntity<List<ReviewsDto>> getAllReviews(@PathVariable Integer itemId){
 		
