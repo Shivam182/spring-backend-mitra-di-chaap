@@ -9,13 +9,20 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.api.mitra_di_chaap.entities.Item;
+import com.api.mitra_di_chaap.exceptions.ResourceNotFoundException;
+import com.api.mitra_di_chaap.repositories.ItemRepo;
 import com.api.mitra_di_chaap.services.FileService;
 
 @Service
 public class FileServiceImpl implements FileService {
+	
+	@Autowired
+	private ItemRepo itemRepo;
 
 	@Override
 	public String uploadImage(String path, MultipartFile file) throws IOException {
@@ -37,13 +44,15 @@ public class FileServiceImpl implements FileService {
 		// file copy
 		Files.copy(file.getInputStream(), Paths.get(filepath));
 		
-		return name;
+		return filename1;
 	}
 	
 	
 
 	@Override
-	public InputStream getResource(String path, String filename) throws FileNotFoundException {
+	public InputStream getResource(String path, Integer itemId) throws FileNotFoundException {
+		Item item = this.itemRepo.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item","item id",itemId));
+		String filename = item.getImageName();
 		String fullPath = path + File.separator + filename;
 		InputStream is = new FileInputStream(fullPath);
 		return is;

@@ -146,7 +146,7 @@ public class ItemController {
 		
 		// search : to all accessible 
 		@GetMapping("items/search/{keywords}")
-		public ResponseEntity<List<ItemDto>> searchPostByTitle(@PathVariable("keywords") String keywords){
+		public ResponseEntity<List<ItemDto>> searchItemByTitle(@PathVariable("keywords") String keywords){
 			List<ItemDto> result = this.itemService.searchItems(keywords);
 			
 			return new ResponseEntity<List<ItemDto>>(result,HttpStatus.OK);
@@ -155,34 +155,26 @@ public class ItemController {
 		
 		// post image upload: only admin accessible 
 		@PreAuthorize("hasAuthority('ADMIN')")
-		@PostMapping("/item/image/upload/{itemId}")
-		public ResponseEntity<ItemDto> uploadPostImage(@RequestParam("image") MultipartFile image,@PathVariable Integer itemId) throws IOException{
+		@PutMapping("/item/image/upload/{itemId}")
+		public ResponseEntity<ItemDto> uploadItemImage(@RequestParam("image") MultipartFile image,@PathVariable Integer itemId) throws IOException{
 			ItemDto postDto = this.itemService.getItemById(itemId);
 			String filename = this.fileService.uploadImage(path, image);
 			
 
-			
+			System.out.println("controller: returned filename : "+filename);
 			postDto.setImageName(filename);
 			ItemDto updatedItem = this.itemService.updateItem(postDto, itemId);
-			
+			System.out.println("controller post dto image name :"+ postDto.getImageName());
 			return new ResponseEntity<ItemDto>(updatedItem,HttpStatus.OK); 
 		}
 		
 		
 		// method to serve files: all accessible 
-		@GetMapping(value="/item/image/{imageName}",produces = MediaType.IMAGE_JPEG_VALUE)
-		public void downloadImage(@PathVariable("imageName") String imageName,HttpServletResponse response)throws IOException{
-			InputStream resource = this.fileService.getResource(path, imageName);
+		@GetMapping(value="/item/image/{itemId}",produces = MediaType.IMAGE_JPEG_VALUE)
+		public void downloadImage(@PathVariable Integer itemId,HttpServletResponse response)throws IOException{
+			InputStream resource = this.fileService.getResource(path, itemId);
 			response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 			StreamUtils.copy(resource, response.getOutputStream());
 		}
 		
-		
-		
-		
-		
 	}
-	
-	
-
-

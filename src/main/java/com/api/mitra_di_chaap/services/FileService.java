@@ -13,6 +13,6 @@ public interface FileService {
 	
 	
 	
-	InputStream getResource(String path, String filename)throws FileNotFoundException;
+	InputStream getResource(String path, Integer itemId)throws FileNotFoundException;
 	
 }

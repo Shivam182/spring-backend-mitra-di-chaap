@@ -92,8 +92,10 @@ public class ItemServiceImpl implements ItemService {
 		item.setTitle(itemDto.getTitle());
 		item.setDescription(itemDto.getDescription());
 		item.setImageName(itemDto.getImageName());
+		System.out.println(itemDto.getImageName());
 		
-		return this.modelMapper.map(item, ItemDto.class);
+		Item updatedItem = this.itemRepo.save(item);
+		return this.modelMapper.map(updatedItem, ItemDto.class);
 	}
 
 	

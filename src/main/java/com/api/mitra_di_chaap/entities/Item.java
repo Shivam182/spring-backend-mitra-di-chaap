@@ -1,6 +1,7 @@
 package com.api.mitra_di_chaap.entities;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -47,11 +49,11 @@ public class Item {
 	private Category category;
 	
 	
-	@ManyToOne
+	@ManyToMany
 	@JoinColumn(name="cartId")
-	private Cart cart;
+	private List<Cart> carts;
 	
-	@OneToMany(mappedBy="foodItem", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="foodItem")
 	private Set<Reviews> reviews = new HashSet<>();
 	
 	@ManyToOne
