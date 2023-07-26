@@ -53,7 +53,7 @@ public class UserController {
 	
 	
 	
-	@PreAuthorize("#id == authentication.principal.id")
+//	@PreAuthorize("#id == authentication.principal.id")
 	@PutMapping("/{userId}")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto,@PathVariable("userId") Integer userId){
 		UserDto updated_user = this.userService.updateuser(userDto, userId);
@@ -62,7 +62,7 @@ public class UserController {
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
+//	@PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<ApiResponse> deleteUser(@PathVariable("userId") Integer id){
 			

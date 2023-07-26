@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,12 +23,23 @@ public class CartController {
 	@Autowired
 	private CartService cartService;
 	
-	// add to cart
-	@PreAuthorize("#cartId == authentication.principal.id")
-	@PutMapping("/add/{cartId}/{itemId}")
-	public ResponseEntity<CartDto> addToCart(@PathVariable Integer itemId, @PathVariable Integer cartId){	
+	
+	// create user cart
+	@PostMapping("/{cartId}")
+	public ResponseEntity<CartDto> createCart(@PathVariable Integer cartId){
+		CartDto cart = this.cartService.createCart(cartId);
 		
-		CartDto updated = this.cartService.addToCart(itemId, cartId);
+		
+		return new ResponseEntity<CartDto>(cart, HttpStatus.OK);
+	}
+	
+	
+	// add to cart
+//	@PreAuthorize("#cartId == authentication.principal.id")
+	@PutMapping("/add/{cartId}/{itemId}/{itemCount}")
+	public ResponseEntity<CartDto> addToCart(@PathVariable Integer itemId, @PathVariable Integer cartId, @PathVariable Integer itemCount){	
+		
+		CartDto updated = this.cartService.addToCart(itemId, cartId,itemCount);
 		
 		return new ResponseEntity<CartDto>(updated, HttpStatus.OK);
 	}
@@ -35,7 +47,7 @@ public class CartController {
 	
 	
 		// delete an item from a cart
-		@PreAuthorize("#cartId == authentication.principal.id")
+//		@PreAuthorize("#cartId == authentication.principal.id")
 		@PutMapping("/delete/{cartId}/{itemId}")
 		public ResponseEntity<CartDto> deleteItem(@PathVariable Integer itemId, @PathVariable Integer cartId){
 			
@@ -48,14 +60,11 @@ public class CartController {
 		
 		
 		// get a cart by id : accessible to owner user & ADMIN
-		@PreAuthorize("hasAuthority('ADMIN')or #cartId == authentication.principal.id")
+//		@PreAuthorize("hasAuthority('ADMIN')or #cartId == authentication.principal.id")
 		@GetMapping("/{cartId}")
 		public ResponseEntity<CartDto> getCart(@PathVariable Integer cartId){
 			
-			CartDto cart = this.cartService.getCartById(cartId);
-			
-			
-			
+			CartDto cart = this.cartService.getCartById(cartId);	
 			return new ResponseEntity<CartDto>(cart,HttpStatus.OK);
 		}
 		

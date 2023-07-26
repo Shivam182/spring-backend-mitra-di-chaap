@@ -1,21 +1,18 @@
 package com.api.mitra_di_chaap.payloads;
 
-
-import java.util.Map;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class CartDto {
-
+public class FeedbackDto {
 	
-	private int id;
-	private int total;
-//	private int count;
-	private Map<Integer,Integer> food_item;
+	private int Id;
+	
+	private String content;
+	
+	private int userId;
+	
 }

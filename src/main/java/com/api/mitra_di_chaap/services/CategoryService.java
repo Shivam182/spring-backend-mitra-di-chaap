@@ -21,4 +21,5 @@ public interface CategoryService {
 	
 	// getAll
 	List<CategoryDto> getCategories();
+	
 }

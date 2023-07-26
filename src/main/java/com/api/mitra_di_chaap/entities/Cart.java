@@ -1,7 +1,9 @@
 package com.api.mitra_di_chaap.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -31,10 +33,11 @@ public class Cart {
 	
 	private int total;
 	
+//	private int count;
 	
 	
 //	@OneToMany(mappedBy="itemId")
 	@ElementCollection
-	private List<Integer> food_item = new ArrayList<>();
+	private Map<Integer,Integer> food_item = new HashMap<>();
 
 }

@@ -28,6 +28,8 @@ public class ItemDto {
 	
 	private Cart cart;
 	
+	private Integer price;
+	
 	private Set<ReviewsDto> reviews = new HashSet<>();
 	
 }

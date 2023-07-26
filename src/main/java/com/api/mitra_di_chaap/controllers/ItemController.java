@@ -56,7 +56,7 @@ public class ItemController {
 	private String path;
 	
 		// create : only admin accessible 
-		@PreAuthorize("hasAuthority('ADMIN')")
+//		@PreAuthorize("hasAuthority('ADMIN')")
 		@PostMapping("/item/category/{categoryId}")
 		public ResponseEntity<ItemDto> createItem( @RequestBody ItemDto itemDto, @PathVariable Integer categoryId){
 			
@@ -122,7 +122,7 @@ public class ItemController {
 		
 		
 		// delete item: only admin accessible
-		@PreAuthorize("hasAuthority('ADMIN')")
+//		@PreAuthorize("hasAuthority('ADMIN')")
 		@DeleteMapping("/item/{itemId}")
 		public ResponseEntity<ApiResponse> deleteItem(@PathVariable Integer itemId) {
 			
@@ -135,7 +135,7 @@ public class ItemController {
 		
 		
 		// update an item: only admin accessible 
-		@PreAuthorize("hasAuthority('ADMIN')")
+//		@PreAuthorize("hasAuthority('ADMIN')")
 		@PutMapping("/item/{itemId}")
 		public ResponseEntity<ItemDto> updateItem(@RequestBody ItemDto itemDto, @PathVariable Integer itemId ){
 			

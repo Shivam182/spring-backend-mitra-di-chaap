@@ -1,6 +1,6 @@
 package com.api.mitra_di_chaap.services.impl;
 
-import java.util.List;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +27,16 @@ public class CartServiceImpl implements CartService {
 
 
 	@Override
-	public CartDto addToCart(Integer itemId, Integer cartId) {
+	public CartDto addToCart(Integer itemId, Integer cartId,Integer itemCount) {
 		
 		Cart cart = this.cartRepo.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("Cart", "cart id", cartId));
 		
-		List<Integer> items = cart.getFood_item();
-		items.add(itemId);
+		Map<Integer,Integer> items = cart.getFood_item();
+//		items.add(itemId);
+		items.put(itemId, itemCount);
 		
 		cart.setFood_item(items);
-		cart.setTotal(55);
+		cart.setTotal(0);
 		
 		this.cartRepo.save(cart);
 		

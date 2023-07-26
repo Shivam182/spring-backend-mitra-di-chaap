@@ -10,7 +10,7 @@ public interface CartService {
 	
 	CartDto getCartById(Integer userId);
 	
-	CartDto addToCart(Integer itemId, Integer cartId);
+	CartDto addToCart(Integer itemId, Integer cartId, Integer itemCount);
 	
 	CartDto deleteFromCart(Integer itemId, Integer cartId);
 	

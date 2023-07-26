@@ -25,7 +25,7 @@ public class ReviewsController {
 	private ReviewsService reviewsService;
 	
 	
-	@PreAuthorize("#userId == authentication.principal.id")
+//	@PreAuthorize("#userId == authentication.principal.id")
 	@PostMapping("/user/{userId}/item/{itemId}")
 	public ResponseEntity<ReviewsDto> createReview(@RequestBody ReviewsDto reviews,@PathVariable Integer itemId,@PathVariable Integer userId){
 		
@@ -38,7 +38,7 @@ public class ReviewsController {
 	
 	
 	// only accessible to writer
-	@PreAuthorize("#userId == authentication.principal.id")
+//	@PreAuthorize("#userId == authentication.principal.id")
 	@DeleteMapping("/user/{userId}/{reviewId}")
 	public ResponseEntity<ApiResponse> deleteReview(@PathVariable Integer reviewId,@PathVariable Integer userId){
 		
