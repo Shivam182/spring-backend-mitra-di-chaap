@@ -137,4 +137,17 @@ public class UserServiceImpl implements UserService {
 		return userDto;
 	}
 
+
+	@Override
+	public List<UserDto> findByName(String name) {
+		
+		List<User> users = this.userRepo.findByNameIgnoreCase(name);
+		
+		List<UserDto> userDtos = users.stream().map((item)-> this.modelMapper.map(item, UserDto.class)).collect(Collectors.toList());
+		
+		
+		
+		return userDtos;
+	}
+
 }

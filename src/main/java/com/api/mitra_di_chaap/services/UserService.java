@@ -20,5 +20,7 @@ public interface UserService {
 	// only for self and operator 
 	void deleteUser(Integer userId);	
 	
+	List<UserDto> findByName(String name);
+	
 	
 }

@@ -91,5 +91,14 @@ public class UserController {
 		return new ResponseEntity<UserDto>(userDto,HttpStatus.OK);
 //		return ResponseEntity.ok().headers(httpHeaders).body(userDto);
 	}
+	
+	
+	@GetMapping("/name/{name}")
+	public ResponseEntity<List<UserDto>> getUsersByName(@PathVariable String name){
+		List<UserDto> users = this.userService.findByName(name);
+		
+		
+		return new ResponseEntity<List<UserDto>>(users,HttpStatus.OK);
+	}
 		
 }
