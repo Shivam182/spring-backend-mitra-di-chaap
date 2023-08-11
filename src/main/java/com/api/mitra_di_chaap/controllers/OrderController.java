@@ -1,5 +1,8 @@
 package com.api.mitra_di_chaap.controllers;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,9 @@ public class OrderController {
 	// create an order 
 	@PostMapping("/new/{userId}")
 	public ResponseEntity<OrderDto> createOrder(@PathVariable Integer userId, @RequestBody OrderDto orderDto){
+		DateFormat dform = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+		Date obj = new Date();
+		orderDto.setOrderedOn(dform.format(obj));
 		
 		OrderDto order =  this.orderService.createOrder(userId, orderDto);
 		

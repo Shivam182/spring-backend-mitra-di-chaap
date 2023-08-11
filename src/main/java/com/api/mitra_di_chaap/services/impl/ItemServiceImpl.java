@@ -12,17 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import com.api.mitra_di_chaap.entities.Cart;
 import com.api.mitra_di_chaap.entities.Category;
 import com.api.mitra_di_chaap.entities.Item;
-import com.api.mitra_di_chaap.entities.User;
 import com.api.mitra_di_chaap.exceptions.ResourceNotFoundException;
 import com.api.mitra_di_chaap.payloads.ItemDto;
 import com.api.mitra_di_chaap.payloads.ItemResponse;
-import com.api.mitra_di_chaap.repositories.CartRepo;
 import com.api.mitra_di_chaap.repositories.CategoryRepo;
 import com.api.mitra_di_chaap.repositories.ItemRepo;
-import com.api.mitra_di_chaap.repositories.UserRepo;
 import com.api.mitra_di_chaap.services.ItemService;
 
 
@@ -30,8 +26,8 @@ import com.api.mitra_di_chaap.services.ItemService;
 public class ItemServiceImpl implements ItemService {
 
 	
-	@Autowired
-	private UserRepo userRepo;
+//	@Autowired
+//	private UserRepo userRepo;
 	
 	@Autowired
 	private ItemRepo itemRepo;
@@ -40,27 +36,27 @@ public class ItemServiceImpl implements ItemService {
 	private ModelMapper modelMapper;
 	
 	
-	@Autowired
-	private CartRepo cartRepo;
+//	@Autowired
+//	private CartRepo cartRepo;
 	
 	@Autowired
 	private CategoryRepo categoryRepo;
 	
 	
-	@Override
-	public ItemDto addToCart(Integer itemId, Integer cartId) {
-		Cart cart = this.cartRepo.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("User", "user id", cartId));
-		
-		Item item = this.itemRepo.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item","item id",itemId));
-		
-//		this.cartRepo.save(item);
-		
-		item.setCart(cart);
-		
-		
-		
-		return this.modelMapper.map(item, ItemDto.class);
-	}
+//	@Override
+//	public ItemDto addToCart(Integer itemId, Integer cartId) {
+//		Cart cart = this.cartRepo.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("User", "user id", cartId));
+//		
+//		Item item = this.itemRepo.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item","item id",itemId));
+//		
+////		this.cartRepo.save(item);
+//		
+////		item.setCart(cart);
+//		
+//		this.cartRepo.save(cart);
+//		
+//		return this.modelMapper.map(item, ItemDto.class);
+//	}
 	
 	
 	
@@ -72,8 +68,7 @@ public class ItemServiceImpl implements ItemService {
 		
 		Item item = this.modelMapper.map(itemDto, Item.class);
 		
-		
-		item.setImageName("default.png");
+
 		item.setCategory(category);
 		
 		
@@ -91,8 +86,8 @@ public class ItemServiceImpl implements ItemService {
 		
 		item.setTitle(itemDto.getTitle());
 		item.setDescription(itemDto.getDescription());
-		item.setImageName(itemDto.getImageName());
-		System.out.println(itemDto.getImageName());
+		item.setStock(itemDto.getStock());
+		item.setRatings(itemDto.getRatings());
 		
 		Item updatedItem = this.itemRepo.save(item);
 		return this.modelMapper.map(updatedItem, ItemDto.class);
@@ -168,19 +163,19 @@ public class ItemServiceImpl implements ItemService {
 
 
 	// gets all items of a user cart
-	@Override
-	public List<ItemDto> getItemsByUser(Integer cartId) {
-		
-//		Cart cart = this.cartRepo.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("User","user id",cartId));
+//	@Override
+//	public List<ItemDto> getItemsByUser(Integer cartId) {
 //		
-//		List<Integer> ids = cart.getFood_item();
-		
-		User user  = this.userRepo.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("User","user id",cartId));
-		List<Item> items = this.itemRepo.findByUser(user);
-		List<ItemDto> itemDtos = items.stream().map((item)->this.modelMapper.map(item, ItemDto.class)).collect(Collectors.toList());
-		
-		return itemDtos;
-	}
+////		Cart cart = this.cartRepo.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("User","user id",cartId));
+////		
+////		List<Integer> ids = cart.getFood_item();
+//		
+//		User user  = this.userRepo.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("User","user id",cartId));
+//		List<Item> items = this.itemRepo.findByUser(user);
+//		List<ItemDto> itemDtos = items.stream().map((item)->this.modelMapper.map(item, ItemDto.class)).collect(Collectors.toList());
+//		
+//		return itemDtos;
+//	}
 
 	
 	

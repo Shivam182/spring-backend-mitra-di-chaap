@@ -49,8 +49,8 @@ public class User implements UserDetails{
 	
 	
 	// cart-items
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Item> food_items = new ArrayList<>();
+//	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<Item> food_items = new ArrayList<>();
 	
 	
 	@ManyToMany( cascade =CascadeType.PERSIST, fetch = FetchType.EAGER)

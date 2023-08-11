@@ -2,7 +2,9 @@ package com.api.mitra_di_chaap.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +33,7 @@ import com.api.mitra_di_chaap.payloads.CartDto;
 import com.api.mitra_di_chaap.payloads.ItemDto;
 import com.api.mitra_di_chaap.payloads.ItemResponse;
 import com.api.mitra_di_chaap.services.CartService;
+import com.api.mitra_di_chaap.services.CloudinaryImageService;
 import com.api.mitra_di_chaap.services.FileService;
 import com.api.mitra_di_chaap.services.ItemService;
 
@@ -43,12 +46,15 @@ public class ItemController {
 	@Autowired
 	private ItemService itemService;
 	
-	@Autowired
-	private CartService cartService;
+//	@Autowired
+//	private CartService cartService;
 	
 	
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private CloudinaryImageService cloudinaryImageService;
 	
 	
 	// here the images folder in our server program only acts as the database for serving/storing the images.
@@ -68,22 +74,22 @@ public class ItemController {
 		
 		
 		// get by cartUId
-		@PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
-		@GetMapping("/user/{userId}/items")
-		public ResponseEntity<List<ItemDto>> getItemsByUser(@PathVariable Integer userId){
-			
-			CartDto cartDto = this.cartService.getCartById(userId);
-			
-			// get food item ids
-			List<Integer> ids = cartDto.getFood_item();
-			
-			// get items using food ids
-			List<ItemDto> cartItems = ids.stream().map((id)-> this.itemService.getItemById(id)).collect(Collectors.toList());	
-			
-			
-			return new ResponseEntity<List<ItemDto>>(cartItems,HttpStatus.OK);
-			
-		}
+//		@PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
+//		@GetMapping("/user/{userId}/items")
+//		public ResponseEntity<List<ItemDto>> getItemsByUser(@PathVariable Integer userId){
+//			
+//			CartDto cartDto = this.cartService.getCartById(userId);
+//			
+//			// get food item ids
+//			List<Integer> ids = cartDto.getFood_item();
+//			
+//			// get items using food ids
+//			List<ItemDto> cartItems = ids.stream().map((id)-> this.itemService.getItemById(id)).collect(Collectors.toList());	
+//			
+//			
+//			return new ResponseEntity<List<ItemDto>>(cartItems,HttpStatus.OK);
+//			
+//		}
 		
 		
 		
@@ -154,27 +160,28 @@ public class ItemController {
 		
 		
 		// post image upload: only admin accessible 
-		@PreAuthorize("hasAuthority('ADMIN')")
+//		@PreAuthorize("hasAuthority('ADMIN')")
 		@PutMapping("/item/image/upload/{itemId}")
-		public ResponseEntity<ItemDto> uploadItemImage(@RequestParam("image") MultipartFile image,@PathVariable Integer itemId) throws IOException{
-			ItemDto postDto = this.itemService.getItemById(itemId);
-			String filename = this.fileService.uploadImage(path, image);
+		public ResponseEntity<ApiResponse> uploadItemImage(@RequestParam("image") MultipartFile[] images,@PathVariable Integer itemId) throws IOException{
 			
 
-			System.out.println("controller: returned filename : "+filename);
-			postDto.setImageName(filename);
-			ItemDto updatedItem = this.itemService.updateItem(postDto, itemId);
-			System.out.println("controller post dto image name :"+ postDto.getImageName());
-			return new ResponseEntity<ItemDto>(updatedItem,HttpStatus.OK); 
+			
+			 this.cloudinaryImageService.upload(images,itemId);
+
+			
+
+			return new ResponseEntity<ApiResponse>(new ApiResponse("Images uploaded successfully",true), HttpStatus.OK);
 		}
 		
 		
 		// method to serve files: all accessible 
-		@GetMapping(value="/item/image/{itemId}",produces = MediaType.IMAGE_JPEG_VALUE)
-		public void downloadImage(@PathVariable Integer itemId,HttpServletResponse response)throws IOException{
-			InputStream resource = this.fileService.getResource(path, itemId);
-			response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-			StreamUtils.copy(resource, response.getOutputStream());
-		}
+//		@GetMapping(value="/item/image/{itemId}",produces = MediaType.IMAGE_JPEG_VALUE)
+//		public void downloadImage(@PathVariable Integer itemId,HttpServletResponse response)throws IOException{
+//			String resource = this.fileService.getResource(itemId);
+//			response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+//			StreamUtils.copy(resource, response.getOutputStream());
+//			
+//			
+//		}
 		
 	}

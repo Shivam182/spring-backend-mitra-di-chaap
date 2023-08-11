@@ -22,4 +22,8 @@ public class Feedback {
 	
 	private int userId;
 	
+	private String userMail;
+	
+	private String name;
+	
 }

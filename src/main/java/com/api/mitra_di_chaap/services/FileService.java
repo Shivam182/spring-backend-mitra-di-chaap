@@ -9,10 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 public interface FileService {
 	
 	// upload an image
-	String uploadImage(String path, MultipartFile file)throws IOException;
+	void uploadImage( MultipartFile[] files,Integer itemId)throws IOException;
 	
 	
 	
-	InputStream getResource(String path, Integer itemId)throws FileNotFoundException;
+//	String getResource( Integer itemId)throws FileNotFoundException;
 	
 }

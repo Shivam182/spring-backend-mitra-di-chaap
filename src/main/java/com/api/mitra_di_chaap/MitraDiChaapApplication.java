@@ -1,27 +1,23 @@
 package com.api.mitra_di_chaap;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.ServletComponentScan;
+
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.Ordered;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+
 
 import com.api.mitra_di_chaap.config.AppConstants;
 import com.api.mitra_di_chaap.entities.Role;
 import com.api.mitra_di_chaap.repositories.RoleRepo;
+import com.cloudinary.Cloudinary;
 
-//@ServletComponentScan
 @SpringBootApplication
 public class MitraDiChaapApplication {
 	
@@ -41,10 +37,21 @@ public class MitraDiChaapApplication {
 		return new ModelMapper();
 	}
 	
+	@Bean
+	public Cloudinary getCloudinary() {
+		
+		Map<String, String> map = new HashMap<>();
+		
+		map.put("cloud_name", "dcxu9wsvj");
+		map.put("api_key", "747139364576872");
+		map.put("api_secret", "VdEq2Q8jTLw0qHNPQSa6Sl3X0m0");
+		
+		return new Cloudinary(map);
+	}
+	
 	
 
 	
-//	@Override
 	public void run(String... args) throws Exception {
 		
 		System.out.println(this.passwordEncoder.encode("passw"));

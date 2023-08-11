@@ -3,7 +3,6 @@ package com.api.mitra_di_chaap.payloads;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.api.mitra_di_chaap.entities.Cart;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,15 +19,19 @@ public class ItemDto {
 	
 	private String description;
 	
-	private String imageName;
+	private String image1;
+	
+	private String image2;
+	
+	private String image3;
 	
 	private CategoryDto category;
 	
-	private UserDto user;
-	
-	private Cart cart;
-	
 	private Integer price;
+	
+	private Integer stock;
+	
+	private Double ratings;
 	
 	private Set<ReviewsDto> reviews = new HashSet<>();
 	

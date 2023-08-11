@@ -14,5 +14,5 @@ public interface ItemRepo extends JpaRepository<Item, Integer> {
 	
 	List<Item> findByTitleContaining(String title);
 	
-	List<Item> findByUser(User user);
+//	List<Item> findByUser(User user);
 }

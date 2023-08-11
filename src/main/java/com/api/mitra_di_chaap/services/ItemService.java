@@ -18,7 +18,7 @@ public interface ItemService {
 	void deleteItem(Integer itemId);
 	
 	// add to cart
-	ItemDto addToCart(Integer itemId, Integer cartId);
+//	ItemDto addToCart(Integer itemId, Integer cartId);
 	
 	// get all items
 	
@@ -34,7 +34,7 @@ public interface ItemService {
 	
 	
 	// get all items by user:cart
-	List<ItemDto> getItemsByUser(Integer cartId);
+//	List<ItemDto> getItemsByUser(Integer cartId);
 	
 	
 	// get items by search

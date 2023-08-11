@@ -15,4 +15,8 @@ public class FeedbackDto {
 	
 	private int userId;
 	
+	private String userMail;
+	
+	private String name;
+	
 }

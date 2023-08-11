@@ -73,8 +73,8 @@ public class UserController {
 	}
 	
 	
-	@PreAuthorize("hasAuthority('ADMIN')")
-	@GetMapping("")
+//	@PreAuthorize("hasAuthority('ADMIN')")
+	@GetMapping("/all")
 	public ResponseEntity<List<UserDto>> getAllUsers(){
 		
 		return ResponseEntity.ok(this.userService.getAllUsers());

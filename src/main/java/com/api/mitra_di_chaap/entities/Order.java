@@ -1,5 +1,7 @@
 package com.api.mitra_di_chaap.entities;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +29,8 @@ public class Order {
 	private String status;
 	private Integer price;
 	private String address;
+	
+	private String orderedOn;
 	
 	@ElementCollection
 	private Map<Integer,Integer> items = new HashMap<>();

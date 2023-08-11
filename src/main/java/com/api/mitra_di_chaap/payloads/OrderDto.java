@@ -1,5 +1,7 @@
 package com.api.mitra_di_chaap.payloads;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +18,8 @@ public class OrderDto {
 	private String status;
 	private int price;
 	private String address;
+	
+	private String orderedOn;
 	
 	
 	private Map<Integer, Integer> items = new HashMap<>();

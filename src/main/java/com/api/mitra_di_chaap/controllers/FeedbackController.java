@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.mitra_di_chaap.payloads.ApiResponse;
 import com.api.mitra_di_chaap.payloads.FeedbackDto;
+import com.api.mitra_di_chaap.payloads.UserDto;
 import com.api.mitra_di_chaap.services.FeedbackService;
+import com.api.mitra_di_chaap.services.UserService;
 
 @RestController
 @RequestMapping("api/feedback")
@@ -23,13 +25,28 @@ public class FeedbackController {
 	
 	@Autowired
 	FeedbackService feedService;
+	
+	@Autowired
+	UserService userService;
 
 	
 	// create a feedback
 	@PostMapping("/create")
 	public ResponseEntity<FeedbackDto> createFeedback(@RequestBody FeedbackDto feedDto){
 		
+		int userId = feedDto.getUserId();
+		
+		UserDto user = userService.getUserById(userId);
+		
+		String userName = user.getName();
+		
+		
+		feedDto.setName(userName);
+		
 		FeedbackDto myfeedDto = this.feedService.createFeedback(feedDto);
+		
+		
+		
 		
 		return new ResponseEntity<FeedbackDto>(myfeedDto,HttpStatus.OK);
 	}
