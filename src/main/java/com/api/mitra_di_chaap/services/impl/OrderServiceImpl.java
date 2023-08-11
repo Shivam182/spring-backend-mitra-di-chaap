@@ -74,4 +74,39 @@ public class OrderServiceImpl implements OrderService {
 		return this.modelmapper.map(order, OrderDto.class);
 	}
 
+
+	@Override
+	public List<OrderDto> findByAddress(String addr) {
+		
+		List<Order> orders = this.orderRepo.findByAddressIgnoreCase(addr);
+		
+		List<OrderDto> orderDtos = orders.stream().map((item)-> this.modelmapper.map(item, OrderDto.class)).collect(Collectors.toList());
+		
+		return orderDtos;
+	}
+
+
+	@Override
+	public List<OrderDto> findByStatus(String status) {
+	
+List<Order> orders = this.orderRepo.findByStatusIgnoreCase(status);
+		
+		List<OrderDto> orderDtos = orders.stream().map((item)-> this.modelmapper.map(item, OrderDto.class)).collect(Collectors.toList());
+		
+		return orderDtos;
+	}
+
+
+	@Override
+	public List<OrderDto> findByPriceBetween(Integer v1, Integer v2) {
+		
+List<Order> orders = this.orderRepo.findByPriceBetween(v1,v2);
+		
+		List<OrderDto> orderDtos = orders.stream().map((item)-> this.modelmapper.map(item, OrderDto.class)).collect(Collectors.toList());
+		
+		return orderDtos;
+		
+		
+	}
+
 }

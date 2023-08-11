@@ -34,6 +34,7 @@ public class OrderController {
 	// create an order 
 	@PostMapping("/new/{userId}")
 	public ResponseEntity<OrderDto> createOrder(@PathVariable Integer userId, @RequestBody OrderDto orderDto){
+		
 		DateFormat dform = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 		Date obj = new Date();
 		orderDto.setOrderedOn(dform.format(obj));
@@ -86,5 +87,30 @@ public class OrderController {
 		
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Order has been cancelled successfully.",true), HttpStatus.OK);
 		
+	}
+	
+	
+	@GetMapping("/address/{addr}")
+	public ResponseEntity<List<OrderDto>> getByAddress(@PathVariable String addr){
+		
+		List<OrderDto> dtos = this.orderService.findByAddress(addr);
+		
+		return new ResponseEntity<List<OrderDto>>(dtos,HttpStatus.OK);
+	}
+	
+	@GetMapping("/status/{status}")
+	public ResponseEntity<List<OrderDto>> getByStatus(@PathVariable String status){
+		
+		List<OrderDto> dtos = this.orderService.findByStatus(status);
+		
+		return new ResponseEntity<List<OrderDto>>(dtos,HttpStatus.OK);
+	}
+	
+	@GetMapping("/price/{v1}/{v2}")
+	public ResponseEntity<List<OrderDto>> getByAddress(@PathVariable Integer v1, @PathVariable Integer v2){
+		
+		List<OrderDto> dtos = this.orderService.findByPriceBetween(v1,v2);
+		
+		return new ResponseEntity<List<OrderDto>>(dtos,HttpStatus.OK);
 	}
 }
