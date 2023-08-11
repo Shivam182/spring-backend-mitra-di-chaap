@@ -46,8 +46,7 @@ public class ItemController {
 	@Autowired
 	private ItemService itemService;
 	
-//	@Autowired
-//	private CartService cartService;
+
 	
 	
 	@Autowired
@@ -100,6 +99,22 @@ public class ItemController {
 			List<ItemDto> posts = this.itemService.getItemsByCategory(categoryId);
 			return new ResponseEntity<List<ItemDto>>(posts,HttpStatus.OK);
 			
+		}
+		
+		@GetMapping("/query/{query}")
+		public ResponseEntity<List<ItemDto>> getItemByName(@PathVariable String query){
+			
+			List<ItemDto> items = this.itemService.findByTitleContaining(query);
+			
+			return new ResponseEntity<List<ItemDto>>(items,HttpStatus.OK);
+		}
+		
+		
+		@GetMapping("/item/price/{v}/{v1}")
+		public ResponseEntity<List<ItemDto>> getItemsByPrice(@PathVariable Integer v, @PathVariable Integer v1){
+			List<ItemDto> items = this.itemService.findByPrice(v,v1);
+			
+			return new ResponseEntity<List<ItemDto>>(items,HttpStatus.OK);
 		}
 		
 		

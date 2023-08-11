@@ -41,6 +41,11 @@ public interface ItemService {
 	List<ItemDto> searchItems(String keyword);
 	
 	
+	List<ItemDto> findByTitleContaining(String query);
+	
+	List<ItemDto> findByPrice(Integer v,Integer v1);
+	
+	
 	
 	
 

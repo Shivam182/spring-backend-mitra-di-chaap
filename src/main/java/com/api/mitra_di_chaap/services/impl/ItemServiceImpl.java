@@ -157,8 +157,6 @@ public class ItemServiceImpl implements ItemService {
 		
 		return itemDtos;
 	}
-
-	
 	
 
 
@@ -184,6 +182,31 @@ public class ItemServiceImpl implements ItemService {
 		
 		List<Item> items = this.itemRepo.findByTitleContaining(keyword);
 		List<ItemDto> itemDtos = items.stream().map((item)->this.modelMapper.map(item, ItemDto.class)).collect(Collectors.toList());
+		
+		return itemDtos;
+	}
+
+
+
+	@Override
+	public List<ItemDto> findByTitleContaining(String query) {
+		
+		List<Item> items = this.itemRepo.findByTitleContaining(query);
+		
+		List<ItemDto> itemDtos = items.stream().map((item)-> this.modelMapper.map(item, ItemDto.class)).collect(Collectors.toList());
+		
+		return itemDtos;
+	}
+
+
+
+	@Override
+	public List<ItemDto> findByPrice(Integer v,Integer v1) {
+		
+		List<Item> items = this.itemRepo.findByPriceBetween(v,v1);
+		
+		List<ItemDto> itemDtos = items.stream().map((item)-> this.modelMapper.map(item, ItemDto.class)).collect(Collectors.toList());
+		
 		
 		return itemDtos;
 	}

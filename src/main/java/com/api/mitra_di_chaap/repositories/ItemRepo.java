@@ -14,5 +14,7 @@ public interface ItemRepo extends JpaRepository<Item, Integer> {
 	
 	List<Item> findByTitleContaining(String title);
 	
+	List<Item> findByPriceBetween(Integer val1, Integer val2);
+	
 //	List<Item> findByUser(User user);
 }
