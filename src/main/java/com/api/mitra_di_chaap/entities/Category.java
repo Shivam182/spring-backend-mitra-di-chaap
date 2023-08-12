@@ -30,7 +30,7 @@ public class Category {
 	private int categoryId;
 	
 	@Column(name="title", nullable=false, length=100)
-	private String categoryTitle;
+	private String title;
 	
 	@Column(name="description")
 	private String categoryDescription;
