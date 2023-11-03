@@ -9,7 +9,7 @@ public interface TicketService {
 	
 	TicketDto createTicket(TicketDto ticket);
 	
-	TicketDto getTicketById(String id);
+	TicketDto getTicketById(Integer id);
 	
 	List<TicketDto> getTicketsByName(String name);
 	
@@ -17,7 +17,13 @@ public interface TicketService {
 	
 	List<TicketDto> getTicketByTableSize(Integer tableSize);
 	
-	void deleteTicket(String id);
+	List<TicketDto> getTicketsByUserId(Integer userId);
+	
+	List<TicketDto> getAllTkts();
+	
+	void deleteTicket(Integer id);
+	
+	void deleteAll();
 	
 
 }

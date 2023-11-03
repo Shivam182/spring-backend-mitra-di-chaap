@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.api.mitra_di_chaap.entities.Feedback;
@@ -27,7 +28,6 @@ public class FeedbackServiceImpl implements FeedbackService {
 	@Autowired
 	private UserRepo userRepo;
 
-	
 	
 	@Override
 	public FeedbackDto createFeedback(FeedbackDto feedbackDto) {
@@ -74,6 +74,18 @@ public class FeedbackServiceImpl implements FeedbackService {
 		FeedbackDto feedbackDto = this.modelMapper.map(feed, FeedbackDto.class);
 		
 		return feedbackDto;
+	}
+
+
+
+	@Override
+	public List<FeedbackDto> getFeedBackByName(String name) {
+        
+		List<Feedback> feeds = this.feedbackRepo.getFeedsByNameIgnoreCase(name);
+		
+		List<FeedbackDto> feedDtos = feeds.stream().map((feed)->this.modelMapper.map(feed, FeedbackDto.class)).collect(Collectors.toList());
+		
+		return feedDtos;
 	}
 
 }

@@ -12,7 +12,7 @@ public interface FeedbackService {
 	
 	List<FeedbackDto> getAllFeedBacks();
 	
-//	FeedbackDto getFeedBackByUser(Integer userId);
+	List<FeedbackDto> getFeedBackByName(String name);
 	
 	FeedbackDto getFeedbackById(Integer feedId);
 	

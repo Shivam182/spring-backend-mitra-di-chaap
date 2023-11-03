@@ -28,10 +28,9 @@ public class Cart {
 	// assign cartId same as user id.
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int cartId;	
+	private Integer cartId;	
 	
-	private int total;
+	private Integer total;
 	
 //	private int count;
 	

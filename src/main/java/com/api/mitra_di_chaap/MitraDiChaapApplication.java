@@ -4,14 +4,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.ConfigurationException;
+import javax.servlet.MultipartConfigElement;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.api.mitra_di_chaap.config.AppConstants;
 import com.api.mitra_di_chaap.entities.Role;
@@ -30,6 +37,7 @@ public class MitraDiChaapApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MitraDiChaapApplication.class, args);
 	}
+	
 	
 	
 	@Bean

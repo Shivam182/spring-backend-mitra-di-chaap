@@ -7,7 +7,7 @@ import com.api.mitra_di_chaap.payloads.ReviewsDto;
 public interface ReviewsService {
 	
 	// create a review
-	ReviewsDto createReview(ReviewsDto reviewsDto, Integer itemId, Integer userId);
+	ReviewsDto createReview(ReviewsDto reviewsDto, Integer itemId, String userMail);
 	
 	
 	// delete a review

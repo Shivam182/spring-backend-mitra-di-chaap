@@ -1,9 +1,13 @@
 package com.api.mitra_di_chaap.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,14 +17,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Feedback {
 	
 	@Id
-	private int Id;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer Id;
 	
+	@Lob
 	private String content;
 	
-	private int userId;
+//	private Integer userId;
 	
 	private String userMail;
 	

@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +39,8 @@ public class UserController {
 	private CartService cartService;
 	
 	
-	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@PreAuthorize("#userDto.id == authentication.principal.id")
 	@PutMapping("/createCart")
@@ -53,16 +56,19 @@ public class UserController {
 	
 	
 	
-//	@PreAuthorize("#id == authentication.principal.id")
 	@PutMapping("/{userId}")
-	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto,@PathVariable("userId") Integer userId){
+	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto,@PathVariable("userId") Integer userId){
+		
+		// encrypt the user password here 
+		
+//		userDto.setPassword(this.passwordEncoder.encode(userDto.getPassword()));
+		
 		UserDto updated_user = this.userService.updateuser(userDto, userId);
 		return ResponseEntity.ok(updated_user);
 	}
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-//	@PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<ApiResponse> deleteUser(@PathVariable("userId") Integer id){
 			
@@ -73,7 +79,7 @@ public class UserController {
 	}
 	
 	
-//	@PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/all")
 	public ResponseEntity<List<UserDto>> getAllUsers(){
 		
@@ -81,18 +87,16 @@ public class UserController {
 	}
 	
 	
-//	@PreAuthorize("hasAuthority('ADMIN') or #id == authentication.principal.id")
-	@GetMapping(path="/{userId}", consumes= {"*/*"})
+	@GetMapping("/{userId}")
 	public ResponseEntity<UserDto> getSingleUser(@PathVariable Integer userId){
 		
 		UserDto userDto = this.userService.getUserById(userId);
-//		HttpHeaders httpHeaders = new HttpHeaders();
-//		httpHeaders.set("Access-Control-Allow-Origin", "*");
+
 		return new ResponseEntity<UserDto>(userDto,HttpStatus.OK);
-//		return ResponseEntity.ok().headers(httpHeaders).body(userDto);
 	}
 	
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/name/{name}")
 	public ResponseEntity<List<UserDto>> getUsersByName(@PathVariable String name){
 		List<UserDto> users = this.userService.findByName(name);
@@ -100,5 +104,25 @@ public class UserController {
 		
 		return new ResponseEntity<List<UserDto>>(users,HttpStatus.OK);
 	}
+	
+	
+	
+	@GetMapping("/email/{email}")
+	public ResponseEntity<UserDto> getSingleUser(@PathVariable String email){
+		
+		UserDto userDto = this.userService.findUserByEMail(email);
+
+		return new ResponseEntity<UserDto>(userDto,HttpStatus.OK);
+	}
+	
+	
+	@PutMapping("/updatePassword")
+	public ResponseEntity<ApiResponse> updatePassword( @RequestBody UserDto userDto){
+		
+		this.userService.updatePassword(userDto.getId(), userDto);
+		
+		return new ResponseEntity<ApiResponse>(new ApiResponse("Password Updated Successfully", true), HttpStatus.OK);
+	}
+	
 		
 }

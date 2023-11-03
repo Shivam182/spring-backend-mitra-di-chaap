@@ -49,13 +49,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		csrf()
 		.disable()
 		.cors().and()
-//		.disable()
 		.authorizeHttpRequests()
 		.antMatchers("/api/v1/auth/**").permitAll()
-		.antMatchers("/api/item/image/**").permitAll()
-//		.antMatchers(HttpMethod.GET).permitAll()
-//		.anyRequest()
-//		.authenticated()
+		.antMatchers("/api/item/get/**").permitAll()
+		.antMatchers("/api/category/{categoryId}/items").permitAll()
+		.antMatchers("/api/item/price/**").permitAll()
+		.antMatchers("/api/items").permitAll()
+		.antMatchers("/api/categories/name/**").permitAll()
+		.anyRequest()
+		.authenticated()
 		.and()
 		.exceptionHandling().authenticationEntryPoint(this.jwtAuthenticationEntryPoint)
 		.and()
@@ -72,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
 		
-		auth.userDetailsService(this.customUserDetailService);
+		auth.userDetailsService(this.customUserDetailService).passwordEncoder(passwordEncoder());
 		
 	}
 	

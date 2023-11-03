@@ -29,7 +29,9 @@ public class Reviews {
 	private String content;
 	
 	// one comment one user id 
-	private Integer userId;
+//	private Integer userId;
+	
+	private String userName;
 	
 	
 	@ManyToOne(cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)

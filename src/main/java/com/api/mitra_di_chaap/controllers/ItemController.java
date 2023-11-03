@@ -2,6 +2,7 @@ package com.api.mitra_di_chaap.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -12,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.engine.jdbc.StreamUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,9 +64,11 @@ public class ItemController {
 	private String path;
 	
 		// create : only admin accessible 
-//		@PreAuthorize("hasAuthority('ADMIN')")
+		@PreAuthorize("hasAuthority('ADMIN')")
 		@PostMapping("/item/category/{categoryId}")
 		public ResponseEntity<ItemDto> createItem( @RequestBody ItemDto itemDto, @PathVariable Integer categoryId){
+			
+//		System.out.println("IMAGES: "+  itemDto.getImage1());
 			
 		ItemDto createPost = this.itemService.createItem(itemDto, categoryId);
 		
@@ -130,7 +135,7 @@ public class ItemController {
 		
 		
 		// get item by Id: accessible to everyone 
-		@GetMapping("/item/{itemId}")
+		@GetMapping("/item/get/{itemId}")
 		public ResponseEntity<ItemDto> getPostById(@PathVariable Integer itemId){
 			
 			ItemDto itemDto = this.itemService.getItemById(itemId);
@@ -143,7 +148,7 @@ public class ItemController {
 		
 		
 		// delete item: only admin accessible
-//		@PreAuthorize("hasAuthority('ADMIN')")
+		@PreAuthorize("hasAuthority('ADMIN')")
 		@DeleteMapping("/item/{itemId}")
 		public ResponseEntity<ApiResponse> deleteItem(@PathVariable Integer itemId) {
 			
@@ -156,7 +161,7 @@ public class ItemController {
 		
 		
 		// update an item: only admin accessible 
-//		@PreAuthorize("hasAuthority('ADMIN')")
+		@PreAuthorize("hasAuthority('ADMIN')")
 		@PutMapping("/item/{itemId}")
 		public ResponseEntity<ItemDto> updateItem(@RequestBody ItemDto itemDto, @PathVariable Integer itemId ){
 			
@@ -175,18 +180,17 @@ public class ItemController {
 		
 		
 		// post image upload: only admin accessible 
-//		@PreAuthorize("hasAuthority('ADMIN')")
-		@PutMapping("/item/image/upload/{itemId}")
-		public ResponseEntity<ApiResponse> uploadItemImage(@RequestParam("image") MultipartFile[] images,@PathVariable Integer itemId) throws IOException{
+		@PreAuthorize("hasAuthority('ADMIN')")
+		@PostMapping(value ="/item/image/upload/{itemId}")
+		public ResponseEntity<String> uploadItemImage(@RequestParam MultipartFile[] image,@PathVariable Integer itemId) throws IOException{
+			/*BHAI YE POSTMAN KE THROUGH SARE PARAMS UTHA LE RHA HAI , LEKIN BROWSER SE NAHI ???*/
 			
+			 this.cloudinaryImageService.upload(image,itemId);
 
-			
-			 this.cloudinaryImageService.upload(images,itemId);
-
-			
-
-			return new ResponseEntity<ApiResponse>(new ApiResponse("Images uploaded successfully",true), HttpStatus.OK);
-		}
+				
+			 return ResponseEntity.ok()
+				      
+				      .body("Response with header using ResponseEntity");}
 		
 		
 		// method to serve files: all accessible 

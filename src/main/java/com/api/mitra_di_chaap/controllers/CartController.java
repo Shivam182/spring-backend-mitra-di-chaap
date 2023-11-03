@@ -35,7 +35,6 @@ public class CartController {
 	
 	
 	// add to cart
-//	@PreAuthorize("#cartId == authentication.principal.id")
 	@PutMapping("/add/{cartId}/{itemId}/{itemCount}")
 	public ResponseEntity<CartDto> addToCart(@PathVariable Integer itemId, @PathVariable Integer cartId, @PathVariable Integer itemCount){	
 		
@@ -47,7 +46,6 @@ public class CartController {
 	
 	
 		// delete an item from a cart
-//		@PreAuthorize("#cartId == authentication.principal.id")
 		@PutMapping("/delete/{cartId}/{itemId}")
 		public ResponseEntity<CartDto> deleteItem(@PathVariable Integer itemId, @PathVariable Integer cartId){
 			
@@ -60,12 +58,17 @@ public class CartController {
 		
 		
 		// get a cart by id : accessible to owner user & ADMIN
-//		@PreAuthorize("hasAuthority('ADMIN')or #cartId == authentication.principal.id")
 		@GetMapping("/{cartId}")
 		public ResponseEntity<CartDto> getCart(@PathVariable Integer cartId){
 			
 			CartDto cart = this.cartService.getCartById(cartId);	
 			return new ResponseEntity<CartDto>(cart,HttpStatus.OK);
+		}
+		
+		
+		@PutMapping("/update/{cartId}/{itemId}/{itemVal}/{cartTotal}")
+		public void updateCounts(@PathVariable Integer cartId,@PathVariable Integer itemId, @PathVariable Integer itemVal, @PathVariable Integer cartTotal) {
+			this.cartService.updateCartItemCount(cartId, itemId, itemVal, cartTotal);
 		}
 		
 	

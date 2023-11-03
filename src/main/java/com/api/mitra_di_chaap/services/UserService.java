@@ -22,5 +22,8 @@ public interface UserService {
 	
 	List<UserDto> findByName(String name);
 	
+	UserDto findUserByEMail(String email);
+	
+	void updatePassword(Integer userId, UserDto userDto);
 	
 }

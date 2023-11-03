@@ -14,7 +14,7 @@ public interface CartService {
 	
 	CartDto deleteFromCart(Integer itemId, Integer cartId);
 	
-	
+	void updateCartItemCount(Integer cartId,Integer itemId, Integer itemCnt, Integer cart_total);
 	
 	
 

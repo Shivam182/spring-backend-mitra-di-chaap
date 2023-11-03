@@ -14,4 +14,6 @@ public interface OrderRepo extends JpaRepositoryImplementation<Order, Integer> {
 	
 	List<Order> findByPriceBetween(Integer v1,Integer v2);
 	
+	List<Order> getOrdersByemail(String email);
+	
 }

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.api.mitra_di_chaap.entities.Item;
@@ -30,9 +31,9 @@ public class ReviewsServiceImpl implements ReviewsService {
 	@Autowired
 	private ModelMapper modelMapper;
 	
-	
+	@PreAuthorize("#userMail == authentication.principal.email")
 	@Override
-	public ReviewsDto createReview(ReviewsDto reviewsDto, Integer itemId,Integer userId) {
+	public ReviewsDto createReview(ReviewsDto reviewsDto, Integer itemId,String userMail) {
 		
 		// get the food item
 		Item item = this.itemRepo.findById(itemId).orElseThrow(()-> new ResourceNotFoundException("Item","item id",itemId));
@@ -41,7 +42,8 @@ public class ReviewsServiceImpl implements ReviewsService {
 		Reviews review = this.modelMapper.map(reviewsDto, Reviews.class);
 		
 		review.setFoodItem(item);
-		review.setUserId(userId);
+//		review.setUserId(userId);
+		review.setUserName(userMail);
 		
 		
 		Reviews savedReview = this.reviewsRepo.save(review);
@@ -49,7 +51,7 @@ public class ReviewsServiceImpl implements ReviewsService {
 		return this.modelMapper.map(savedReview, ReviewsDto.class);
 	}
 	
-
+	@PreAuthorize("#userId == authentication.principal.id")
 	@Override
 	public void deleteReview(Integer reviewId, Integer userId) {
 		

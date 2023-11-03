@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ public class CategoryController {
 	
 	
 	// create
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PostMapping("/")
 	public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto ){
 		
@@ -38,6 +40,7 @@ public class CategoryController {
 	
 	
 	// update
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PutMapping("/{categoryId}")
 	public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable Integer categoryId){
 		
@@ -48,6 +51,7 @@ public class CategoryController {
 	
 	
 	// get
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/{catId}")
 	public ResponseEntity<CategoryDto> getCategory(@PathVariable Integer catId){
 		CategoryDto categoryDto = this.categoryService.getCategory(catId);
@@ -56,7 +60,8 @@ public class CategoryController {
 	}
 	
 	
-	// get all
+	// get all\
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("")
 	public ResponseEntity<List<CategoryDto>> getCategories(){
 		List<CategoryDto> categories = this.categoryService.getCategories();
@@ -66,6 +71,7 @@ public class CategoryController {
 	
 	
 	// delete
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@DeleteMapping("/{catId}")
 	public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Integer catId){
 		this.categoryService.deleteCategory(catId);
@@ -73,7 +79,7 @@ public class CategoryController {
 		return new ResponseEntity<ApiResponse>(new ApiResponse("category deleted successfully", true), HttpStatus.OK);
 	}
 	
-	
+//	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/name/{name}")
 	public ResponseEntity<CategoryDto> getCatByName(@PathVariable String name){
 		

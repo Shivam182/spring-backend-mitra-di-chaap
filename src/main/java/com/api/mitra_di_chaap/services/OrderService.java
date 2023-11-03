@@ -14,4 +14,5 @@ public interface OrderService {
 	List<OrderDto> findByAddress(String addr);
 	List<OrderDto> findByStatus(String status);
 	List<OrderDto> findByPriceBetween(Integer v1,Integer v2);
+	List<OrderDto> getOrdersByUserEmail(String email);
 }

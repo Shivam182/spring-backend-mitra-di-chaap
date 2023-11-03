@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,14 +35,14 @@ public class FeedbackController {
 	@PostMapping("/create")
 	public ResponseEntity<FeedbackDto> createFeedback(@RequestBody FeedbackDto feedDto){
 		
-		int userId = feedDto.getUserId();
+//		int userId = feedDto.getUserId();
 		
-		UserDto user = userService.getUserById(userId);
+//		UserDto user = userService.getUserById(userId);
 		
-		String userName = user.getName();
+//		String userName = user.getName();
 		
 		
-		feedDto.setName(userName);
+//		feedDto.setName(userName);
 		
 		FeedbackDto myfeedDto = this.feedService.createFeedback(feedDto);
 		
@@ -54,6 +55,7 @@ public class FeedbackController {
 	
 	
 	// get all feedbacks
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/all")
 	public ResponseEntity<List<FeedbackDto>> getAllFeedbacks(){
 		
@@ -65,6 +67,7 @@ public class FeedbackController {
 	
 	
 	// delete a feedback
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@DeleteMapping("/delete/{feedId}")
 	public ResponseEntity<ApiResponse> deleteFeedback(@PathVariable Integer feedId){
 		
@@ -77,6 +80,7 @@ public class FeedbackController {
 	
 	
 	// get a feedback by its id
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/{feedId}")
 	public ResponseEntity<FeedbackDto> getFeedById(@PathVariable Integer feedId){
 		
@@ -86,5 +90,19 @@ public class FeedbackController {
 		
 		return new ResponseEntity<FeedbackDto>(feed,HttpStatus.OK);
 	}
+	
+	
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@GetMapping("/name/{name}")
+	public ResponseEntity<List<FeedbackDto>> getFeedByName(@PathVariable String name){
+		
+		List<FeedbackDto> feed = this.feedService.getFeedBackByName(name);
+		
+		
+		
+		return new ResponseEntity<List<FeedbackDto>>(feed,HttpStatus.OK);
+	}
+	
+	
 	
 }

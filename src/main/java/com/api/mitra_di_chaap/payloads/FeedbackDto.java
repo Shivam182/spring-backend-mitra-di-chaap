@@ -9,11 +9,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FeedbackDto {
 	
-	private int Id;
+	private Integer Id;
 	
 	private String content;
 	
-	private int userId;
+//	private Integer userId;
 	
 	private String userMail;
 	

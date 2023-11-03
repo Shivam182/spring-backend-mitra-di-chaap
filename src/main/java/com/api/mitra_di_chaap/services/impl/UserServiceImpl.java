@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -69,14 +70,14 @@ public class UserServiceImpl implements UserService {
 //	}
 
 	
-	
+	@PreAuthorize("#userId == authentication.principal.id")
 	@Override
 	public UserDto updateuser(UserDto userDto, Integer userId) {
 		User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","user id",userId));
 		
 		user.setName(userDto.getName());
 		user.setEmail(userDto.getEmail());
-		user.setPassword(userDto.getPassword());
+//		user.setPassword(userDto.getPassword());
 		
 		User updated_user = this.userRepo.save(user);
 		
@@ -84,7 +85,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	
-
+	@PreAuthorize("hasAuthority('ADMIN') or #userId == authentication.principal.id")
 	@Override
 	public UserDto getUserById(Integer userId) {
 		
@@ -102,6 +103,7 @@ public class UserServiceImpl implements UserService {
 		return userDtos;
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN') or #userId == authentication.principal.id")
 	@Override
 	public void deleteUser(Integer userId) {
 		User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","user id",userId));
@@ -148,6 +150,26 @@ public class UserServiceImpl implements UserService {
 		
 		
 		return userDtos;
+	}
+
+
+	@PreAuthorize("hasAuthority('ADMIN') or #email == authentication.principal.email")
+	@Override
+	public UserDto findUserByEMail(String email) {
+		User user = this.userRepo.findUserByEmail(email);
+		return this.modelMapper.map(user, UserDto.class);
+	}
+
+	
+	@PreAuthorize("#userId == authentication.principal.id")
+	@Override
+	public void updatePassword(Integer userId, UserDto userDto) {
+		
+		User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User","user_id",userId));
+		
+		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+		
+		this.userRepo.save(user);
 	}
 
 }

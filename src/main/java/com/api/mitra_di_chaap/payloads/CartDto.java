@@ -14,8 +14,8 @@ import lombok.Setter;
 public class CartDto {
 
 	
-	private int id;
-	private int total;
+	private Integer id;
+	private Integer total;
 //	private int count;
 	private Map<Integer,Integer> food_item;
 }

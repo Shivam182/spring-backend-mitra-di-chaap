@@ -1,7 +1,6 @@
 package com.api.mitra_di_chaap.payloads;
 
-import java.text.DateFormat;
-import java.util.Date;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,10 +13,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class OrderDto {
 
-	private int orderId;
+	private Integer orderId;
 	private String status;
-	private int price;
+	private Integer price;
 	private String address;
+	private String email;
 	
 	private String orderedOn;
 	

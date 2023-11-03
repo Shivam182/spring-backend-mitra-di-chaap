@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.api.mitra_di_chaap.entities.Cart;
@@ -25,7 +26,7 @@ public class CartServiceImpl implements CartService {
 	private ModelMapper modelMapper;
 	
 
-
+	@PreAuthorize("#cartId == authentication.principal.id")
 	@Override
 	public CartDto addToCart(Integer itemId, Integer cartId,Integer itemCount) {
 		
@@ -44,6 +45,8 @@ public class CartServiceImpl implements CartService {
 		return cartDto;
 	}
 
+	
+	@PreAuthorize("#cartId == authentication.principal.id")
 	@Override
 	public CartDto deleteFromCart(Integer itemId, Integer cartId) {
 		
@@ -62,6 +65,7 @@ public class CartServiceImpl implements CartService {
 
 	
 	// creates an empty cart 
+	@PreAuthorize("#userId == authentication.principal.id")
 	@Override
 	public CartDto createCart(Integer userId) {
 		Cart cart = new Cart();
@@ -69,13 +73,14 @@ public class CartServiceImpl implements CartService {
 		cart.setFood_item(null);
 		cart.setTotal(0);
 		
+		
 		this.cartRepo.save(cart);
 	
 		return this.modelMapper.map(cart, CartDto.class);
 	}
 
 	
-	
+	@PreAuthorize("hasAuthority('ADMIN') or #userId == authentication.principal.id")
 	@Override
 	public CartDto getCartById(Integer userId) {
 		
@@ -84,6 +89,18 @@ public class CartServiceImpl implements CartService {
 		
 		
 		return this.modelMapper.map(myCart, CartDto.class);
+	}
+	
+	
+	@PreAuthorize("#cartId == authentication.principal.id")
+	@Override
+	public void updateCartItemCount(Integer cartId,Integer itemId, Integer itemCnt, Integer cart_total) {
+			Cart cart = this.cartRepo.findById(cartId).orElseThrow(()-> new ResourceNotFoundException("cart", "cart id", cartId));
+			
+			cart.getFood_item().put(itemId, itemCnt);
+			cart.setTotal(cart_total);
+			
+			this.cartRepo.save(cart);
 	}
 
 }

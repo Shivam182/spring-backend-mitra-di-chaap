@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.api.mitra_di_chaap.entities.Order;
@@ -24,6 +25,7 @@ public class OrderServiceImpl implements OrderService {
 	private ModelMapper modelmapper;
 
 	// get an order
+	
 	@Override
 	public OrderDto getOrder(Integer orderId) {
 		Order order =  this.orderRepo.findById(orderId).orElseThrow(()-> new ResourceNotFoundException("Order", "order_Id", orderId));
@@ -34,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	
 	// create am order
+	@PreAuthorize("#userId == authentication.principal.id")
 	@Override
 	public OrderDto createOrder(Integer userId, OrderDto OrderDto) {
 		
@@ -46,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
 
 	
 	// delete an order
+	@PreAuthorize("hasAuthority('ADMIN') or #userId == authentication.principal.id")
 	@Override
 	public void deleteOrder(Integer orderId) {
 		
@@ -107,6 +111,17 @@ List<Order> orders = this.orderRepo.findByPriceBetween(v1,v2);
 		return orderDtos;
 		
 		
+	}
+
+
+	@Override
+	public List<OrderDto> getOrdersByUserEmail(String email) {
+		
+		List<Order> orders = this.orderRepo.getOrdersByemail(email);
+		
+		List<OrderDto> orderDtos  = orders.stream().map((item)->this.modelmapper.map(item, OrderDto.class)).collect(Collectors.toList());
+		
+		return orderDtos;
 	}
 
 }

@@ -15,7 +15,9 @@ public class ReviewsDto {
 	
 	private String content;
 	
-	private Integer userId;
+//	private Integer userId;
+	
+	private String userName;
 	
 	
 	// though it saves to the database easily but was showing error in getting response due to this being present in the DTO?

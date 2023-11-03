@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api.mitra_di_chaap.entities.User;
 import com.api.mitra_di_chaap.payloads.ApiResponse;
 import com.api.mitra_di_chaap.payloads.ReviewsDto;
+import com.api.mitra_di_chaap.payloads.UserDto;
 import com.api.mitra_di_chaap.services.ReviewsService;
+import com.api.mitra_di_chaap.services.UserService;
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -24,13 +27,19 @@ public class ReviewsController {
 	@Autowired
 	private ReviewsService reviewsService;
 	
+	@Autowired
+	private UserService userService;
 	
-//	@PreAuthorize("#userId == authentication.principal.id")
-	@PostMapping("/user/{userId}/item/{itemId}")
-	public ResponseEntity<ReviewsDto> createReview(@RequestBody ReviewsDto reviews,@PathVariable Integer itemId,@PathVariable Integer userId){
+	
+	
+	@PostMapping("/user/{userMail}/item/{itemId}")
+	public ResponseEntity<ReviewsDto> createReview(@RequestBody ReviewsDto reviews,@PathVariable Integer itemId,@PathVariable String userMail){
 		
+//		UserDto user = this.userService.findUserByEMail(userMail);
+//		
+//		Integer id = user.getId();
 		
-		ReviewsDto reviewsDto = this.reviewsService.createReview(reviews, itemId,userId);
+		ReviewsDto reviewsDto = this.reviewsService.createReview(reviews, itemId,userMail);
 		
 		return new ResponseEntity<ReviewsDto>(reviewsDto,HttpStatus.CREATED);
 		
@@ -38,7 +47,6 @@ public class ReviewsController {
 	
 	
 	// only accessible to writer
-//	@PreAuthorize("#userId == authentication.principal.id")
 	@DeleteMapping("/user/{userId}/{reviewId}")
 	public ResponseEntity<ApiResponse> deleteReview(@PathVariable Integer reviewId,@PathVariable Integer userId){
 		

@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +31,6 @@ public class OrderController {
 	private OrderService orderService;
 	
 	
-	
 	// create an order 
 	@PostMapping("/new/{userId}")
 	public ResponseEntity<OrderDto> createOrder(@PathVariable Integer userId, @RequestBody OrderDto orderDto){
@@ -38,6 +38,8 @@ public class OrderController {
 		DateFormat dform = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 		Date obj = new Date();
 		orderDto.setOrderedOn(dform.format(obj));
+	
+		
 		
 		OrderDto order =  this.orderService.createOrder(userId, orderDto);
 		
@@ -47,6 +49,7 @@ public class OrderController {
 	
 	
 	// get all orders : ADMIN
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/all")
 	public ResponseEntity<List<OrderDto>> getAllOrders(){
 		
@@ -57,6 +60,7 @@ public class OrderController {
 	
 	
 	// access an order details 
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/{orderId}")
 	public ResponseEntity<OrderDto> getOrder(@PathVariable Integer orderId){
 		
@@ -69,16 +73,17 @@ public class OrderController {
 	
 	
 	// update order status : ADMIN
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PutMapping("/updateStatus/{orderId}")
 	public ResponseEntity<OrderDto> updateStatus(@PathVariable Integer orderId, @RequestBody String status){
 //		System.err.println(status);
-		OrderDto orderDto =  this.orderService.updateOrderStatus(orderId, status);
+		OrderDto orderDto =  this.orderService.updateOrderStatus(orderId, status.substring(17, status.length()-4));
 		
 		return new ResponseEntity<OrderDto>(orderDto, HttpStatus.OK);
 	}
 	
 	
-	// deleteOrder : ADMIN / SELF cancel order 
+	// deleteOrder : ADMIN / SELF cancel order
 	@DeleteMapping("/{orderId}")
 	public ResponseEntity<ApiResponse> deleteOrder(@PathVariable Integer orderId){
 		
@@ -89,7 +94,7 @@ public class OrderController {
 		
 	}
 	
-	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/address/{addr}")
 	public ResponseEntity<List<OrderDto>> getByAddress(@PathVariable String addr){
 		
@@ -98,6 +103,7 @@ public class OrderController {
 		return new ResponseEntity<List<OrderDto>>(dtos,HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/status/{status}")
 	public ResponseEntity<List<OrderDto>> getByStatus(@PathVariable String status){
 		
@@ -106,11 +112,22 @@ public class OrderController {
 		return new ResponseEntity<List<OrderDto>>(dtos,HttpStatus.OK);
 	}
 	
+	
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/price/{v1}/{v2}")
 	public ResponseEntity<List<OrderDto>> getByAddress(@PathVariable Integer v1, @PathVariable Integer v2){
 		
 		List<OrderDto> dtos = this.orderService.findByPriceBetween(v1,v2);
 		
 		return new ResponseEntity<List<OrderDto>>(dtos,HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/email/{email}")
+	public ResponseEntity<List<OrderDto>> getOrdersByUserEmail(@PathVariable String email){
+		
+		List<OrderDto> orders = this.orderService.getOrdersByUserEmail(email);
+		
+		return new ResponseEntity<List<OrderDto>>(orders, HttpStatus.OK);
 	}
 }
